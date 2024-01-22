@@ -38,11 +38,15 @@ function socketConnect() {
         msgRow.textContent = msg.data;
         document.getElementById('events').appendChild(msgRow);
         const obj = JSON.parse(msg.data);
-        const tr = document.getElementById('gpio' + obj.gpio);
-        httpRequest('GET', '/api/gpio/' + obj.gpio, null, function(data) {
-            tr.childNodes[2].textContent = data.value;
-        });
+        updateGPIOvalue(obj.gpio);
     }
+}
+
+function updateGPIOvalue(gpio) {
+    const tr = document.getElementById('gpio' + gpio);
+    httpRequest('GET', '/api/gpio/' + gpio, null, function(data) {
+        tr.childNodes[2].textContent = data.value;
+    });
 }
 
 function toggleGPIO(event) {
@@ -51,7 +55,7 @@ function toggleGPIO(event) {
     });
     const gpio = event.target.closest('tr').data.gpio;
     httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
-        getGPIOs();
+        updateGPIOvalue(gpio);
     });
 }
 
@@ -70,7 +74,7 @@ function setGPIO() {
         "value": value
     });
     httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
-        getGPIOs();
+        updateGPIOvalue(gpio);
     });
 }
 
@@ -90,7 +94,7 @@ function blinkGPIO() {
         "interval": interval
     });
     httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
-        getGPIOs();
+        updateGPIOvalue(gpio);
     });
 }
 
