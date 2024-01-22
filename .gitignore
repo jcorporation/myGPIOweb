@@ -1,3 +1,4 @@
-src/.cache
 debug
+src/.cache
+src/compile_commands.json
 *~
