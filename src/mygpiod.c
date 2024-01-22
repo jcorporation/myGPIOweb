@@ -31,7 +31,8 @@ bool mygpiod_check_error(struct t_state *state) {
     PRINT_LOG_ERROR("myGPIOd %s: %s", err_str, mygpio_connection_get_error(state->conn));
     if (conn_state == MYGPIO_STATE_ERROR) {
         mygpio_connection_clear_error(state->conn);
-        return true;
+        mygpio_response_end(state->conn);
+        return false;
     }
     mygpiod_disconnect(state);
     return false;
@@ -56,7 +57,7 @@ bool mygpiod_connect(struct t_state *state, const char *socket, int timeout_ms) 
         PRINT_LOG_ERROR("Unable to send idle command");
     }
     if (mygpiod_check_error(state) == false) {
-        mygpio_response_end(state->conn);
+        mygpiod_disconnect(state);
         return false;
     }
     state->pfds[0].fd = mygpio_connection_get_fd(state->conn);
@@ -76,11 +77,6 @@ bool mygpiod_event_handler(struct t_state *state, struct mg_mgr *mgr) {
             mygpio_idle_event_get_timestamp_ms(event)
         );
         mygpio_free_idle_event(event);
-    }
-    if (mygpiod_check_error(state) == false) {
-        PRINT_LOG_ERROR("Unable to read events");
-        mygpio_response_end(state->conn);
-        return false;
     }
     mygpio_response_end(state->conn);
     return true;

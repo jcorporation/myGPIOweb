@@ -53,7 +53,9 @@ int main(void) {
                     if (mygpio_send_idle(state.conn) == false) {
                         PRINT_LOG_ERROR("Unable to send idle command");
                     }
-                    mygpiod_check_error(&state);
+                    if (mygpiod_check_error(&state) == false) {
+                        mygpiod_disconnect(&state);
+                    }
                 }
                 else if (revents & (POLLERR | POLLNVAL | POLLHUP)) {
                     mygpiod_disconnect(&state);

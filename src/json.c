@@ -106,7 +106,6 @@ sds sds_catjson_len(sds s, const char *p, size_t len) {
     return sdscatlen(s, "\"", 1);
 }
 
-
 const char *bool_to_str(bool v) {
     return v == true
         ? "true"

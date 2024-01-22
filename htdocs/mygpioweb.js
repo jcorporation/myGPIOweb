@@ -1,5 +1,9 @@
 let socket = null;
 
+const modalGPIOinfoInit = BSN.Modal.getInstance(document.getElementById('modalGPIOinfo'));
+const modalGPIOsetInit = BSN.Modal.getInstance(document.getElementById('modalGPIOset'));
+const modalGPIOblinkInit = BSN.Modal.getInstance(document.getElementById('modalGPIOblink'));
+
 function getUri(proto) {
     const protocol = proto === 'ws'
         ? window.location.protocol === 'https:'
@@ -51,10 +55,62 @@ function toggleGPIO(event) {
     });
 }
 
+function showModalSetGPIO(event) {
+    const gpio = event.target.closest('tr').data.gpio;
+    document.getElementById('modalGPIOsetGPIO').value = gpio;
+    modalGPIOsetInit.show();
+}
+
+function setGPIO() {
+    const gpio = document.getElementById('modalGPIOsetGPIO').value;
+    const valueEl = document.getElementById('modalGPIOsetValue');
+    const value = valueEl.options[valueEl.selectedIndex].value;
+    const body = JSON.stringify({
+        "action": "set",
+        "value": value
+    });
+    httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
+        getGPIOs();
+    });
+}
+
+function showModalBlinkGPIO(event) {
+    const gpio = event.target.closest('tr').data.gpio;
+    document.getElementById('modalGPIOblinkGPIO').value = gpio;
+    modalGPIOblinkInit.show();
+}
+
+function blinkGPIO() {
+    const gpio = document.getElementById('modalGPIOblinkGPIO').value;
+    const timeout = Number(document.getElementById('modalGPIOblinkTimeout').value)
+    const interval = Number(document.getElementById('modalGPIOblinkInterval').value)
+    const body = JSON.stringify({
+        "action": "set",
+        "timeout": timeout,
+        "interval": interval
+    });
+    httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
+        getGPIOs();
+    });
+}
+
 function infoGPIO(event) {
+    const gpioInfoEl = document.getElementById('modalGPIOinfoList');
+    gpioInfoEl.textContent = '';
     const gpio = event.target.closest('tr').data.gpio;
     httpRequest('OPTIONS', '/api/gpio/' + gpio, null, function(data) {
-        //TODO:show details for the gpio
+        const keys = Object.keys(data.data);
+        for (const key of keys) {
+            const tr = document.createElement('tr');
+            const td1 = document.createElement('td');
+            td1.textContent = key;
+            tr.appendChild(td1);
+            const td2 = document.createElement('td');
+            td2.textContent = data.data[key];
+            tr.appendChild(td2);
+            gpioInfoEl.appendChild(tr);
+        }
+        modalGPIOinfoInit.show();
     });
 }
 
@@ -76,6 +132,8 @@ function getGPIOactions(direction) {
     td.appendChild(createActionLink('&#x1F6C8', 'Info', infoGPIO));
     if (direction === 'out') {
         td.appendChild(createActionLink('&#x25e9', 'Toggle', toggleGPIO));
+        td.appendChild(createActionLink('&#x2713', 'Set', showModalSetGPIO));
+        td.appendChild(createActionLink('&#x2600', 'Blink', showModalBlinkGPIO));
     }
     return td;
 }
@@ -144,4 +202,14 @@ document.getElementById('websocketReconnect').addEventListener('click', function
 document.getElementById('gpioRefresh').addEventListener('click', function(event) {
     event.preventDefault();
     getGPIOs();
+}, false);
+
+document.getElementById('modalGPIOblinkSet').addEventListener('click', function(event) {
+    blinkGPIO();
+    modalGPIOblinkInit.hide();
+}, false);
+
+document.getElementById('modalGPIOsetSet').addEventListener('click', function(event) {
+    setGPIO();
+    modalGPIOsetInit.hide();
 }, false);

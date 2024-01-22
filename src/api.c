@@ -6,6 +6,8 @@
 
 #include "src/api.h"
 
+#include "dist/mongoose/mongoose.h"
+#include "dist/sds/sds.h"
 #include "src/json.h"
 #include "src/log.h"
 #include "src/mygpiod.h"
@@ -114,9 +116,40 @@ sds api_gpio_gpio_options(struct t_state *state, sds buffer, unsigned gpio_nr, b
     return buffer;
 }
 
-sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, bool *rc) {
-    (void)state;
-    (void)gpio_nr;
+sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, struct mg_http_message *hm, bool *rc) {
+    char *action = mg_json_get_str(hm->body, ".action");
+    char *value_str = NULL;
+    long timeout;
+    long interval;
+    enum mygpio_gpio_value value;
+    if (action == NULL) {
+        *rc = false;
+        return buffer;
+    }
+    if (strcmp(action, "gpioblink") == 0 &&
+        (timeout = mg_json_get_long(hm->body, ".timeout", -1)) > -1 &&
+        (interval = mg_json_get_long(hm->body, ".interval", -1)) > -1 &&
+        timeout < INT_MAX &&
+        interval < INT_MAX)
+    {
+        *rc = mygpio_gpioblink(state->conn, gpio_nr, (int)timeout, (int)interval) ||
+            mygpiod_check_error(state);
+    }
+    else if (strcmp(action, "gpioset") == 0 &&
+             (value_str = mg_json_get_str(hm->body, ".value")) != NULL &&
+             (value = mygpio_gpio_parse_value(value_str)) != MYGPIO_GPIO_VALUE_UNKNOWN)
+    {
+        *rc = mygpio_gpioset(state->conn, gpio_nr, value) ||
+            mygpiod_check_error(state);
+    }
+    else if (strcmp(action, "gpiotoggle") == 0) {
+        *rc = mygpio_gpiotoggle(state->conn, gpio_nr) ||
+            mygpiod_check_error(state);
+    }
+    free(action);
+    if (value_str != NULL) {
+        free(value_str);
+    }
     *rc = false;
     return buffer;
 }

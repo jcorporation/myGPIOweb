@@ -7,6 +7,7 @@
 #ifndef API_H
 #define API_H
 
+#include "dist/mongoose/mongoose.h"
 #include "dist/sds/sds.h"
 #include "src/state.h"
 
@@ -15,6 +16,6 @@
 sds api_gpio_get(struct t_state *state, sds buffer, bool *rc);
 sds api_gpio_gpio_get(struct t_state *state, sds buffer, unsigned gpio_nr, bool *rc);
 sds api_gpio_gpio_options(struct t_state *state, sds buffer, unsigned gpio_nr, bool *rc);
-sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, bool *rc);
+sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, struct mg_http_message *hm, bool *rc);
 
 #endif

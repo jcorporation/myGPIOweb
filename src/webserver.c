@@ -30,36 +30,41 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
     }
     else {
         PRINT_LOG_DEBUG("Leaving idle mode");
-        if (mygpio_send_noidle(state->conn) == true) {
-            mygpiod_event_handler(state, nc->mgr);
-        }
-        struct mg_str caps[2];
-        if (mg_http_match_uri(hm, "/api/gpio") == true &&
-            mg_vcmp(&hm->method, "GET") == 0)
+        if (mygpio_send_noidle(state->conn) == false ||
+            mygpiod_check_error(state) == false)
         {
-            buffer = api_gpio_get(state, buffer, &rc);
+            mygpiod_disconnect(state);
         }
-        else if (mg_match(hm->uri, mg_str("/api/gpio/*"), caps) == true) {
-            unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
-            if (gpio < 99) {
-                if (mg_vcmp(&hm->method, "GET") == 0) {
-                    buffer = api_gpio_gpio_get(state, buffer, gpio, &rc);
-                }
-                else if (mg_vcmp(&hm->method, "OPTIONS") == 0) {
-                    buffer = api_gpio_gpio_options(state, buffer, gpio, &rc);
-                }
-                else if (mg_vcmp(&hm->method, "POST") == 0) {
-                    buffer = api_gpio_gpio_post(state, buffer, gpio, &rc);
+        else {
+            mygpiod_event_handler(state, nc->mgr);
+            struct mg_str caps[2];
+            if (mg_http_match_uri(hm, "/api/gpio") == true &&
+                mg_vcmp(&hm->method, "GET") == 0)
+            {
+                buffer = api_gpio_get(state, buffer, &rc);
+            }
+            else if (mg_match(hm->uri, mg_str("/api/gpio/*"), caps) == true) {
+                unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
+                if (gpio < 99) {
+                    if (mg_vcmp(&hm->method, "GET") == 0) {
+                        buffer = api_gpio_gpio_get(state, buffer, gpio, &rc);
+                    }
+                    else if (mg_vcmp(&hm->method, "OPTIONS") == 0) {
+                        buffer = api_gpio_gpio_options(state, buffer, gpio, &rc);
+                    }
+                    else if (mg_vcmp(&hm->method, "POST") == 0) {
+                        buffer = api_gpio_gpio_post(state, buffer, gpio, hm, &rc);
+                    }
                 }
             }
-        }
-        PRINT_LOG_DEBUG("Entering idle mode");
-        if (mygpio_send_idle(state->conn) == false) {
-            PRINT_LOG_ERROR("Unable to send idle command");
-        }
-        if (mygpiod_check_error(state) == false) {
-            //TODO: get error and set response
-            rc = false;
+            PRINT_LOG_DEBUG("Entering idle mode");
+            if (mygpio_send_idle(state->conn) == false) {
+                PRINT_LOG_ERROR("Unable to send idle command");
+            }
+            if (mygpiod_check_error(state) == false) {
+                mygpiod_disconnect(state);
+                rc = false;
+            }
         }
         if (sdslen(buffer) == 0) {
             buffer = sdscat(buffer,"{\"error\":\"Invalid API request\"}");
