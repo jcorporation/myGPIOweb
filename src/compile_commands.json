@@ -1,56 +1,47 @@
 [
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/dist/mongoose",
-  "command": "/usr/bin/cc   -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -DMG_ENABLE_DIRLIST=0 -DMG_ENABLE_SSI=0 -Wno-unused-parameter -o CMakeFiles/mongoose.dir/mongoose.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/dist/mongoose/mongoose.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/dist/mongoose/mongoose.c",
-  "output": "dist/mongoose/CMakeFiles/mongoose.dir/mongoose.c.o"
+  "directory": "/data/src/myGPIOweb/debug/dist/mongoose",
+  "command": "/usr/bin/cc   -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -DMG_ENABLE_DIRLIST=0 -DMG_ENABLE_SSI=0 -Wno-unused-parameter -o CMakeFiles/mongoose.dir/mongoose.c.o -c /data/src/myGPIOweb/dist/mongoose/mongoose.c",
+  "file": "/data/src/myGPIOweb/dist/mongoose/mongoose.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/dist/sds",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -Wno-conversion -o CMakeFiles/sds.dir/sds.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/dist/sds/sds.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/dist/sds/sds.c",
-  "output": "dist/sds/CMakeFiles/sds.dir/sds.c.o"
+  "directory": "/data/src/myGPIOweb/debug/dist/sds",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -Wno-conversion -o CMakeFiles/sds.dir/sds.c.o -c /data/src/myGPIOweb/dist/sds/sds.c",
+  "file": "/data/src/myGPIOweb/dist/sds/sds.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/src",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web/debug -I/home/juergen/projekte/myGPIOd/mygpiod-web -I/usr/local/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpiod-web.dir/api.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/src/api.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/src/api.c",
-  "output": "src/CMakeFiles/mygpiod-web.dir/api.c.o"
+  "directory": "/data/src/myGPIOweb/debug/src",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb/debug -I/data/src/myGPIOweb -I/usr/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpioweb.dir/api.c.o -c /data/src/myGPIOweb/src/api.c",
+  "file": "/data/src/myGPIOweb/src/api.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/src",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web/debug -I/home/juergen/projekte/myGPIOd/mygpiod-web -I/usr/local/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpiod-web.dir/json.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/src/json.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/src/json.c",
-  "output": "src/CMakeFiles/mygpiod-web.dir/json.c.o"
+  "directory": "/data/src/myGPIOweb/debug/src",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb/debug -I/data/src/myGPIOweb -I/usr/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpioweb.dir/json.c.o -c /data/src/myGPIOweb/src/json.c",
+  "file": "/data/src/myGPIOweb/src/json.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/src",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web/debug -I/home/juergen/projekte/myGPIOd/mygpiod-web -I/usr/local/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpiod-web.dir/log.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/src/log.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/src/log.c",
-  "output": "src/CMakeFiles/mygpiod-web.dir/log.c.o"
+  "directory": "/data/src/myGPIOweb/debug/src",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb/debug -I/data/src/myGPIOweb -I/usr/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpioweb.dir/log.c.o -c /data/src/myGPIOweb/src/log.c",
+  "file": "/data/src/myGPIOweb/src/log.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/src",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web/debug -I/home/juergen/projekte/myGPIOd/mygpiod-web -I/usr/local/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpiod-web.dir/main.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/src/main.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/src/main.c",
-  "output": "src/CMakeFiles/mygpiod-web.dir/main.c.o"
+  "directory": "/data/src/myGPIOweb/debug/src",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb/debug -I/data/src/myGPIOweb -I/usr/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpioweb.dir/main.c.o -c /data/src/myGPIOweb/src/main.c",
+  "file": "/data/src/myGPIOweb/src/main.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/src",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web/debug -I/home/juergen/projekte/myGPIOd/mygpiod-web -I/usr/local/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpiod-web.dir/mygpiod.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/src/mygpiod.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/src/mygpiod.c",
-  "output": "src/CMakeFiles/mygpiod-web.dir/mygpiod.c.o"
+  "directory": "/data/src/myGPIOweb/debug/src",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb/debug -I/data/src/myGPIOweb -I/usr/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpioweb.dir/mygpiod.c.o -c /data/src/myGPIOweb/src/mygpiod.c",
+  "file": "/data/src/myGPIOweb/src/mygpiod.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/src",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web/debug -I/home/juergen/projekte/myGPIOd/mygpiod-web -I/usr/local/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpiod-web.dir/state.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/src/state.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/src/state.c",
-  "output": "src/CMakeFiles/mygpiod-web.dir/state.c.o"
+  "directory": "/data/src/myGPIOweb/debug/src",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb/debug -I/data/src/myGPIOweb -I/usr/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpioweb.dir/state.c.o -c /data/src/myGPIOweb/src/state.c",
+  "file": "/data/src/myGPIOweb/src/state.c"
 },
 {
-  "directory": "/home/juergen/projekte/myGPIOd/mygpiod-web/debug/src",
-  "command": "/usr/bin/cc  -I/home/juergen/projekte/myGPIOd/mygpiod-web/debug -I/home/juergen/projekte/myGPIOd/mygpiod-web -I/usr/local/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fcf-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpiod-web.dir/webserver.c.o -c /home/juergen/projekte/myGPIOd/mygpiod-web/src/webserver.c",
-  "file": "/home/juergen/projekte/myGPIOd/mygpiod-web/src/webserver.c",
-  "output": "src/CMakeFiles/mygpiod-web.dir/webserver.c.o"
+  "directory": "/data/src/myGPIOweb/debug/src",
+  "command": "/usr/bin/cc  -I/data/src/myGPIOweb/debug -I/data/src/myGPIOweb -I/usr/include/libmygpio -DMYGPIODWEB_DEBUG=ON -fdata-sections -ffunction-sections -fstack-protector-strong -pedantic -Wall -Wconversion -Werror -Wextra -Wformat -Wformat=2 -Wformat-security -Winit-self -Wmissing-include-dirs -Wnested-externs -Wold-style-definition -Wredundant-decls -Wshadow -Wsign-compare -Wstrict-prototypes -Wundef -Wuninitialized -Wunused-parameter -Wvla -Wwrite-strings -std=gnu17 -fstack-clash-protection -fno-plt -D_FORTIFY_SOURCE=2 -ggdb -Og -o CMakeFiles/mygpioweb.dir/webserver.c.o -c /data/src/myGPIOweb/src/webserver.c",
+  "file": "/data/src/myGPIOweb/src/webserver.c"
 }
 ]

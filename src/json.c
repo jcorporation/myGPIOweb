@@ -28,6 +28,10 @@ static const char *escape_char(char c) {
     return NULL;
 }
 
+sds sds_catjson_plain(sds s, const char *p) {
+    return sds_catjson_plain_len(s, p, strlen(p));
+}
+
 /**
  * Append to the sds string "s" a json escaped string
  * After the call, the modified sds string is no longer valid and all the
@@ -37,7 +41,7 @@ static const char *escape_char(char c) {
  * @param len length of the string to append
  * @return modified sds string
  */
-sds sds_catjson_plain(sds s, const char *p, size_t len) {
+sds sds_catjson_plain_len(sds s, const char *p, size_t len) {
     /* To avoid continuous reallocations, let's start with a buffer that
      * can hold at least stringlength + 10 chars. */
     s = sdsMakeRoomFor(s, len + 10);
@@ -80,6 +84,10 @@ sds sds_catjson_plain(sds s, const char *p, size_t len) {
     return s;
 }
 
+sds sds_catjson(sds s, const char *p) {
+    return sds_catjson_len(s, p, strlen(p));
+}
+
 /**
  * Append to the sds string "s" a quoted json escaped string
  * After the call, the modified sds string is no longer valid and all the
@@ -89,11 +97,18 @@ sds sds_catjson_plain(sds s, const char *p, size_t len) {
  * @param len length of the string to append
  * @return modified sds string
  */
-sds sds_catjson(sds s, const char *p, size_t len) {
+sds sds_catjson_len(sds s, const char *p, size_t len) {
     /* To avoid continuous reallocations, let's start with a buffer that
      * can hold at least stringlength + 10 chars. */
     s = sdsMakeRoomFor(s, len + 10);
     s = sdscatlen(s, "\"", 1);
-    s = sds_catjson_plain(s, p, len);
+    s = sds_catjson_plain_len(s, p, len);
     return sdscatlen(s, "\"", 1);
+}
+
+
+const char *bool_to_str(bool v) {
+    return v == true
+        ? "true"
+        : "false";
 }

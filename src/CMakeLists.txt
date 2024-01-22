@@ -2,24 +2,24 @@
 # myMPD (c) 2018-2024 Juergen Mang <mail@jcgames.de>
 # https://github.com/jcorporation/mympd
 
-add_executable(mygpiod-web "")
+add_executable(mygpioweb "")
 
 if(CMAKE_BUILD_TYPE MATCHES "(Release|Debug)")
-  target_compile_options(mygpiod-web
+  target_compile_options(mygpioweb
     PRIVATE
       "-Wconversion"
       "-Wformat=2"
   )
 endif()
 
-target_include_directories(mygpiod-web
+target_include_directories(mygpioweb
   PRIVATE 
     ${PROJECT_BINARY_DIR}
     ${PROJECT_SOURCE_DIR}
     ${LIBMYGPIO_INCLUDE_DIRS}
 )
 
-target_sources(mygpiod-web PRIVATE
+target_sources(mygpioweb PRIVATE
   api.c
   json.c
   log.c
@@ -30,7 +30,7 @@ target_sources(mygpiod-web PRIVATE
 )
 
 # link all together
-target_link_libraries(mygpiod-web
+target_link_libraries(mygpioweb
   mongoose
   sds
   ${LIBMYGPIO_LIBRARIES}

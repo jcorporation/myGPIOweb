@@ -15,43 +15,58 @@ void websocket_broadcast(struct mg_mgr *mgr, unsigned gpio, enum mygpio_event ev
     while (nc != NULL) {
         if (nc->is_websocket == 1U) {
             PRINT_LOG_DEBUG("Send event to connection id: %lu", nc->id);
-            mg_ws_printf(nc, WEBSOCKET_OP_TEXT, "{\"gpio\":%u,\"event\":%s,\"ts_ms\":%llu}",
-                gpio, mygpio_lookup_event(event), (unsigned long long) ts_ms);
+            mg_ws_printf(nc, WEBSOCKET_OP_TEXT, "{\"gpio\":%u,\"event\":\"%s\",\"ts_ms\":%llu}",
+                gpio, mygpio_lookup_event(event), (unsigned long long)ts_ms);
         }
         nc = nc->next;
     }
 }
 
 void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http_message *hm) {
-    PRINT_LOG_DEBUG("Leaving idle mode");
-    if (mygpio_send_noidle(state->conn) == true) {
-        mygpiod_event_handler(state, nc->mgr);
-    }
-    sds buffer = sdsempty();
     bool rc = false;
-    if (mg_http_match_uri(hm, "/api/gpio") == true &&
-        mg_vcmp(&hm->method, "GET") == 0)
-    {
-        buffer = api_gpiolist(state, buffer, &rc);
-    }
-    PRINT_LOG_DEBUG("Entering idle mode");
-    if (mygpio_send_idle(state->conn) == false) {
-        PRINT_LOG_ERROR("Unable to send idle command");
-    }
-    if (mygpiod_check_error(state) == false) {
-        rc = false;
-    }
-    if (rc == true) {
-        mg_http_reply(nc, 200, "Content-Type: application/json\r\n",
-            "%s", buffer);
+    sds buffer = sdsempty();
+    if (state->conn == NULL) {
+        buffer = sdscat(buffer,"{\"error\":\"Not connected to myGPIOd\"}");
     }
     else {
+        PRINT_LOG_DEBUG("Leaving idle mode");
+        if (mygpio_send_noidle(state->conn) == true) {
+            mygpiod_event_handler(state, nc->mgr);
+        }
+        struct mg_str caps[2];
+        if (mg_http_match_uri(hm, "/api/gpio") == true &&
+            mg_vcmp(&hm->method, "GET") == 0)
+        {
+            buffer = api_gpio_get(state, buffer, &rc);
+        }
+        else if (mg_match(hm->uri, mg_str("/api/gpio/*"), caps) == true) {
+            unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
+            if (gpio < 99) {
+                if (mg_vcmp(&hm->method, "GET") == 0) {
+                    buffer = api_gpio_gpio_get(state, buffer, gpio, &rc);
+                }
+                else if (mg_vcmp(&hm->method, "OPTIONS") == 0) {
+                    buffer = api_gpio_gpio_options(state, buffer, gpio, &rc);
+                }
+                else if (mg_vcmp(&hm->method, "POST") == 0) {
+                    buffer = api_gpio_gpio_post(state, buffer, gpio, &rc);
+                }
+            }
+        }
+        PRINT_LOG_DEBUG("Entering idle mode");
+        if (mygpio_send_idle(state->conn) == false) {
+            PRINT_LOG_ERROR("Unable to send idle command");
+        }
+        if (mygpiod_check_error(state) == false) {
+            //TODO: get error and set response
+            rc = false;
+        }
         if (sdslen(buffer) == 0) {
             buffer = sdscat(buffer,"{\"error\":\"Invalid API request\"}");
         }
-        mg_http_reply(nc, 500, "Content-Type: application/json\r\n",
-            "%s", buffer);
     }
+    mg_http_reply(nc, (rc == true ? 200 : 500), "Content-Type: application/json\r\n",
+        "%s", buffer);
     sdsfree(buffer);
 }
 

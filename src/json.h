@@ -9,7 +9,13 @@
 
 #include "dist/sds/sds.h"
 
-sds sds_catjson_plain(sds s, const char *p, size_t len);
-sds sds_catjson(sds s, const char *p, size_t len);
+#include <stdbool.h>
+
+sds sds_catjson_plain(sds s, const char *p);
+sds sds_catjson(sds s, const char *p);
+sds sds_catjson_plain_len(sds s, const char *p, size_t len);
+sds sds_catjson_len(sds s, const char *p, size_t len);
+
+const char *bool_to_str(bool v);
 
 #endif

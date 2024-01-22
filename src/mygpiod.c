@@ -27,7 +27,8 @@ bool mygpiod_check_error(struct t_state *state) {
     if (conn_state == MYGPIO_STATE_OK) {
         return true;
     }
-    PRINT_LOG_ERROR("myGPIOd error: %s", mygpio_connection_get_error(state->conn));
+    const char *err_str = conn_state == MYGPIO_STATE_FATAL ? "fatal" : "error";
+    PRINT_LOG_ERROR("myGPIOd %s: %s", err_str, mygpio_connection_get_error(state->conn));
     if (conn_state == MYGPIO_STATE_ERROR) {
         mygpio_connection_clear_error(state->conn);
         return true;

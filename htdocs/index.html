@@ -8,23 +8,23 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>mygpiod-web</title>
+  <title>myGPIOweb</title>
   <link href="bootstrap.css" rel="stylesheet">
-  <link href="mygpiod-web.css" rel="stylesheet">
+  <link href="mygpioweb.css" rel="stylesheet">
 </head>
 <body>
   <header>
     <nav class="navbar navbar-expand fixed-top">
-      <a class="navbar-brand ms-3" href="index.html">mygpiod-web</a>
+      <a class="navbar-brand ms-3" href="index.html">myGPIOweb</a>
     </nav>
   </header>
   <main class="container-fluid">
     <div class="card mb-3">
-      <div class="card-header">Configured GPIOs</div>
+      <div class="card-header">Configured GPIOs<a id="gpioRefresh" href="#" class="reload float-end" title="Refresh">&#x1F5D8</a></div>
       <div class="card-body">
-        <table>
+        <table class="table">
           <thead>
-            <tr><th>GPIO</th><th>Direction</th><th>State</th></tr>
+            <tr><th>GPIO</th><th>Direction</th><th>State</th><th></th></tr>
           </thead>
           <tbody id="gpios"></tbody>
         </table>
@@ -34,9 +34,9 @@
     <div class="card">
       <div class="card-header">Events</div>
       <div class="card-body" id="events"></div>
-      <div class="card-footer"><small id="websocketState"></small></div>
+      <div class="card-footer"><small id="websocketState"></small><a id="websocketReconnect" href="#" class="reload float-end" title="Reconnect">&#x1F5D8</a></div>
     </div>
   </main>
-  <script src="mygpiod-web.js"></script>
+  <script src="mygpioweb.js"></script>
 </body>
 </html>
