@@ -20,6 +20,6 @@ Sends idle events from myGPIOd to connected clients.
 
 ### POST /api/gpio/{gpio number}
 
-- gpioblink: `{"action": "gpioset", "timeout": <ms>, "interval": <ms>}`
+- gpioblink: `{"action": "gpioblink", "timeout": <ms>, "interval": <ms>}`
 - gpioset: `{"action": "gpioset", "value": "active|inactive"}`
 - gpiotoggle: `{"action": "gpiotoggle"}`

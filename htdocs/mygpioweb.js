@@ -47,7 +47,7 @@ function socketConnect() {
 
 function toggleGPIO(event) {
     const body = JSON.stringify({
-        "action": "toggle"
+        "action": "gpiotoggle"
     });
     const gpio = event.target.closest('tr').data.gpio;
     httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
@@ -66,7 +66,7 @@ function setGPIO() {
     const valueEl = document.getElementById('modalGPIOsetValue');
     const value = valueEl.options[valueEl.selectedIndex].value;
     const body = JSON.stringify({
-        "action": "set",
+        "action": "gpioset",
         "value": value
     });
     httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
@@ -85,7 +85,7 @@ function blinkGPIO() {
     const timeout = Number(document.getElementById('modalGPIOblinkTimeout').value)
     const interval = Number(document.getElementById('modalGPIOblinkInterval').value)
     const body = JSON.stringify({
-        "action": "set",
+        "action": "gpioblink",
         "timeout": timeout,
         "interval": interval
     });

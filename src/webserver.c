@@ -56,6 +56,9 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
                         buffer = api_gpio_gpio_post(state, buffer, gpio, hm, &rc);
                     }
                 }
+                else {
+                    PRINT_LOG_ERROR("Invalid gpio");
+                }
             }
             PRINT_LOG_DEBUG("Entering idle mode");
             if (mygpio_send_idle(state->conn) == false) {

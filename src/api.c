@@ -124,6 +124,7 @@ sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, stru
     enum mygpio_gpio_value value;
     if (action == NULL) {
         *rc = false;
+        PRINT_LOG_ERROR("No action for uri %.*s", (int)hm->uri.len, hm->uri.ptr);
         return buffer;
     }
     if (strcmp(action, "gpioblink") == 0 &&
@@ -146,10 +147,12 @@ sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, stru
         *rc = mygpio_gpiotoggle(state->conn, gpio_nr) ||
             mygpiod_check_error(state);
     }
+    else {
+        PRINT_LOG_ERROR("Invalid action \"%s\" or values for uri %.*s", action, (int)hm->uri.len, hm->uri.ptr);
+    }
     free(action);
     if (value_str != NULL) {
         free(value_str);
     }
-    *rc = false;
     return buffer;
 }
