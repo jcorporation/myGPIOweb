@@ -117,19 +117,19 @@ sds api_gpio_gpio_options(struct t_state *state, sds buffer, unsigned gpio_nr, b
 }
 
 sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, struct mg_http_message *hm, bool *rc) {
-    char *action = mg_json_get_str(hm->body, ".action");
     char *value_str = NULL;
     long timeout;
     long interval;
     enum mygpio_gpio_value value;
+    char *action = mg_json_get_str(hm->body, "$.action");
     if (action == NULL) {
         *rc = false;
         PRINT_LOG_ERROR("No action for uri %.*s", (int)hm->uri.len, hm->uri.ptr);
         return buffer;
     }
     if (strcmp(action, "gpioblink") == 0 &&
-        (timeout = mg_json_get_long(hm->body, ".timeout", -1)) > -1 &&
-        (interval = mg_json_get_long(hm->body, ".interval", -1)) > -1 &&
+        (timeout = mg_json_get_long(hm->body, "$.timeout", -1)) > -1 &&
+        (interval = mg_json_get_long(hm->body, "$.interval", -1)) > -1 &&
         timeout < INT_MAX &&
         interval < INT_MAX)
     {
@@ -137,7 +137,7 @@ sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, stru
             mygpiod_check_error(state);
     }
     else if (strcmp(action, "gpioset") == 0 &&
-             (value_str = mg_json_get_str(hm->body, ".value")) != NULL &&
+             (value_str = mg_json_get_str(hm->body, "$.value")) != NULL &&
              (value = mygpio_gpio_parse_value(value_str)) != MYGPIO_GPIO_VALUE_UNKNOWN)
     {
         *rc = mygpio_gpioset(state->conn, gpio_nr, value) ||
