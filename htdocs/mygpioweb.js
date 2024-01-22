@@ -139,11 +139,11 @@ function createActionLink(icon, title, callback) {
 function getGPIOactions(direction) {
     const td = document.createElement('td');
     td.appendChild(createActionLink('&#x1F6C8', 'Info', infoGPIO));
+    td.appendChild(createActionLink('&#x1F5D8', 'Refresh', refreshGPIO));
     if (direction === 'out') {
         td.appendChild(createActionLink('&#x25e9', 'Toggle', toggleGPIO));
         td.appendChild(createActionLink('&#x2713', 'Set', showModalSetGPIO));
-        td.appendChild(createActionLink('&#x2609', 'Blink', showModalBlinkGPIO));
-        td.appendChild(createActionLink('&#x1F5D8', 'Refresh', refreshGPIO));
+        td.appendChild(createActionLink('&#x2606', 'Blink', showModalBlinkGPIO));
     }
     return td;
 }
