@@ -49,6 +49,11 @@ function updateGPIOvalue(gpio) {
     });
 }
 
+function refreshGPIO(event) {
+    const gpio = event.target.closest('tr').data.gpio;
+    updateGPIOvalue(gpio);
+}
+
 function toggleGPIO(event) {
     const body = JSON.stringify({
         "action": "gpiotoggle"
@@ -137,7 +142,8 @@ function getGPIOactions(direction) {
     if (direction === 'out') {
         td.appendChild(createActionLink('&#x25e9', 'Toggle', toggleGPIO));
         td.appendChild(createActionLink('&#x2713', 'Set', showModalSetGPIO));
-        td.appendChild(createActionLink('&#x2600', 'Blink', showModalBlinkGPIO));
+        td.appendChild(createActionLink('&#x2609', 'Blink', showModalBlinkGPIO));
+        td.appendChild(createActionLink('&#x1F5D8', 'Refresh', refreshGPIO));
     }
     return td;
 }
