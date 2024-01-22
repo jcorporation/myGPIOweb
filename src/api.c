@@ -154,5 +154,8 @@ sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, stru
     if (value_str != NULL) {
         free(value_str);
     }
+    if (*rc == true) {
+        buffer = sdscat(buffer, "{\"message\":\"OK\"}");
+    }
     return buffer;
 }
