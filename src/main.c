@@ -17,6 +17,7 @@ int main(void) {
     set_loglevel(LOG_DEBUG);
     log_on_tty = isatty(fileno(stdout));
     log_to_syslog = false;
+    bool rc = EXIT_FAILURE;
 
     setvbuf(stdout, NULL, _IOLBF, 0);
     setvbuf(stderr, NULL, _IOLBF, 0);
@@ -38,7 +39,7 @@ int main(void) {
     mygpiod_connect(&state, state.socket, 5000);
     if (mg_http_listen(&mgr, state.listen_on, webserver_handler, NULL) == NULL) {
         PRINT_LOG_ERROR("Unable to listen on %s", state.listen_on);
-        return EXIT_FAILURE;
+        goto out;
     }
     PRINT_LOG_INFO("Listening on %s", state.listen_on);
     for (;;) {
@@ -58,6 +59,7 @@ int main(void) {
                     }
                 }
                 else if (revents & (POLLERR | POLLNVAL | POLLHUP)) {
+                    PRINT_LOG_ERROR("Poll error: %s", strerror(errno));
                     mygpiod_disconnect(&state);
                 }
             }
@@ -73,7 +75,11 @@ int main(void) {
             }
         }
     }
+    rc = EXIT_SUCCESS;
+
+    out:
     mg_mgr_free(&mgr);
     mygpiod_disconnect(&state);
-    return EXIT_SUCCESS;
+    state_clear(&state);
+    return rc;
 }
