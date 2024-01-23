@@ -4,29 +4,31 @@ This project provides a simple webfrontend for myGPIOd. It uses the libmygpio li
 
 ## Build
 
-Building myGPIOd is straight forward.
+1. Install dependencies: cmake, libmygpio
+2. Get myGPIOd tarball from [GitHub](https://github.com/jcorporation/myGPIOweb/releases/latest)
+3. Extract myGPIOweb tarball and change path to this directory
+4. Run cmake: `cmake -B build -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release .`
+5. Build: `make -C build`
+6. Install (as root): `make -C build install`
 
-### Dependencies
+## Run
 
-- C build environment
-- cmake >= 3.13
-- libmygpio
+```
+mygpioweb [option]...
+```
 
-### Build myGPIOweb
+| Option | Description |
+| ------ | ----------- |
+| `-s`, `--socket` | myGPIOd socket (default: `/run/mygpiod/socket`) |
+| `-l`, `--listen` | HTTP listening address (default: `http://0.0.0.0:8000`) |
+| `-o`, `--syslog` | enable syslog logging (facility: daemon) |
+| `-h`, `--help` | displays this help |
+| `-v`, `--version` | displays this help |
 
-1. Get myGPIOd tarball from [GitHub](https://github.com/jcorporation/myGPIOweb/releases/latest)
-2. Extract myGPIOweb tarball and change path to this directory
-3. Run cmake: `cmake -B build -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release .`
-4. Build: `make -C build`
-5. Install (as root): `make -C build install`
 
 ## Provided endpoints
 
 myGPIOweb provides a websocket to retrieve gpio events without polling and a REST API to control GPIOs.
-
-## Run
-
-
 
 ### Websocket
 
@@ -35,7 +37,7 @@ Sends idle events from myGPIOd to connected clients.
 - Path: `/ws`
 - Format: `{"gpio": <gpio number>, "event": <event>, "ts_ms": <timestamp in ms>}`
 
-## #REST Endpoints
+### REST Endpoints
 
 | Path | Method | Command |
 | ---- | ------ | ----------- |
