@@ -10,6 +10,13 @@
 #include "src/log.h"
 #include "src/mygpiod.h"
 
+/**
+ * Broadcasts a gpio event to all connected websocket clients
+ * @param mgr mongoose mgr
+ * @param gpio gpio number
+ * @param event event to emit
+ * @param ts_ms timestamp of the event
+ */
 void websocket_broadcast(struct mg_mgr *mgr, unsigned gpio, enum mygpio_event event, uint64_t ts_ms) {
     struct mg_connection *nc = mgr->conns;
     while (nc != NULL) {
@@ -22,6 +29,12 @@ void websocket_broadcast(struct mg_mgr *mgr, unsigned gpio, enum mygpio_event ev
     }
 }
 
+/**
+ * Handles the REST API requests
+ * @param state pointer to state
+ * @param nc client connection
+ * @param hm mongoose http message struct
+ */
 void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http_message *hm) {
     bool rc = false;
     sds buffer = sdsempty();
@@ -78,6 +91,13 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
     sdsfree(buffer);
 }
 
+/**
+ * Central mongoose event handler.
+ * @param nc client connection
+ * @param ev event type
+ * @param ev_data event data
+ * @param fn_data user data (unused)
+ */
 void webserver_handler(struct mg_connection *nc, int ev, void *ev_data, void *fn_data) {
     if (ev == MG_EV_HTTP_MSG) {
         struct mg_http_message *hm = (struct mg_http_message *)ev_data;

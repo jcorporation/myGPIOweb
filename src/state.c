@@ -8,6 +8,10 @@
 
 #include <stdlib.h>
 
+/**
+ * Clears the state struct
+ * @param state pointer to state
+ */
 void state_clear(struct t_state *state) {
     free(state->socket);
     free(state->listen_on);

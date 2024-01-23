@@ -17,6 +17,13 @@
 #include <stdio.h>
 #include <string.h>
 
+/**
+ * Handles the REST API request for GET /api/gpio
+ * @param state pointer to state
+ * @param buffer already allocated buffer to populate with the response
+ * @param rc pointer to bool to set the result code
+ * @return sds pointer to buffer
+ */
 sds api_gpio_get(struct t_state *state, sds buffer, bool *rc) {
     if (mygpio_gpiolist(state->conn) == true) {
         struct t_mygpio_gpio *gpio;
@@ -51,6 +58,14 @@ sds api_gpio_get(struct t_state *state, sds buffer, bool *rc) {
     return buffer;
 }
 
+/**
+ * Handles the REST API request for GET /api/gpio/{gpio_nr}
+ * @param state pointer to state
+ * @param buffer already allocated buffer to populate with the response
+ * @param gpio_nr gpio number
+ * @param rc pointer to bool to set the result code
+ * @return sds pointer to buffer
+ */
 sds api_gpio_gpio_get(struct t_state *state, sds buffer, unsigned gpio_nr, bool *rc) {
     enum mygpio_gpio_value value = mygpio_gpioget(state->conn, gpio_nr);
     if (mygpiod_check_error(state) == true) { 
@@ -69,6 +84,14 @@ sds api_gpio_gpio_get(struct t_state *state, sds buffer, unsigned gpio_nr, bool 
     return buffer;
 }
 
+/**
+ * Handles the REST API request for OPTIONS /api/gpio/{gpio_nr}
+ * @param state pointer to state
+ * @param buffer already allocated buffer to populate with the response
+ * @param gpio_nr gpio number
+ * @param rc pointer to bool to set the result code
+ * @return sds pointer to buffer
+ */
 sds api_gpio_gpio_options(struct t_state *state, sds buffer, unsigned gpio_nr, bool *rc) {
     if (mygpio_gpioinfo(state->conn, gpio_nr) == true) {
         struct t_mygpio_gpio *gpio = mygpio_recv_gpio_info(state->conn);
@@ -116,6 +139,15 @@ sds api_gpio_gpio_options(struct t_state *state, sds buffer, unsigned gpio_nr, b
     return buffer;
 }
 
+/**
+ * Handles the REST API request for POST /api/gpio/{gpio_nr}
+ * @param state pointer to state
+ * @param buffer already allocated buffer to populate with the response
+ * @param gpio_nr gpio number
+ * @param hm mongoose http message struct
+ * @param rc pointer to bool to set the result code
+ * @return sds pointer to buffer
+ */
 sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, struct mg_http_message *hm, bool *rc) {
     char *value_str = NULL;
     long timeout;

@@ -1,9 +1,11 @@
 let socket = null;
 
+// BSN modal instances
 const modalGPIOinfoInit = BSN.Modal.getInstance(document.getElementById('modalGPIOinfo'));
 const modalGPIOsetInit = BSN.Modal.getInstance(document.getElementById('modalGPIOset'));
 const modalGPIOblinkInit = BSN.Modal.getInstance(document.getElementById('modalGPIOblink'));
 
+// Caclulates the uri for websocket and http requests.
 function getUri(proto) {
     const protocol = proto === 'ws'
         ? window.location.protocol === 'https:'
@@ -14,10 +16,12 @@ function getUri(proto) {
         (window.location.port !== '' ? ':' + window.location.port : '');
 }
 
+// Sets the error message in the footer.
 function setError(msg) {
     document.getElementById('lastError').textContent = msg;
 }
 
+// Connect to the websocket and set event listeners.
 function socketConnect() {
     document.getElementById('websocketState').textContent = 'Connecting';
     if (socket != null) {
@@ -42,6 +46,7 @@ function socketConnect() {
     }
 }
 
+// Gets and updates the value of a GPIO.
 function updateGPIOvalue(gpio) {
     const tr = document.getElementById('gpio' + gpio);
     httpRequest('GET', '/api/gpio/' + gpio, null, function(data) {
@@ -49,11 +54,13 @@ function updateGPIOvalue(gpio) {
     });
 }
 
+// Executes the refresh GPIO value action.
 function refreshGPIO(event) {
     const gpio = event.target.closest('tr').data.gpio;
     updateGPIOvalue(gpio);
 }
 
+// Executes the toggle GPIO action.
 function toggleGPIO(event) {
     const body = JSON.stringify({
         "action": "gpiotoggle"
@@ -62,12 +69,14 @@ function toggleGPIO(event) {
     httpRequest('POST', '/api/gpio/' + gpio, body, null);
 }
 
+// Shows the modal for the set GPIO action.
 function showModalSetGPIO(event) {
     const gpio = event.target.closest('tr').data.gpio;
     document.getElementById('modalGPIOsetGPIO').value = gpio;
     modalGPIOsetInit.show();
 }
 
+// Executes the set GPIO action.
 function setGPIO() {
     const gpio = document.getElementById('modalGPIOsetGPIO').value;
     const valueEl = document.getElementById('modalGPIOsetValue');
@@ -79,12 +88,14 @@ function setGPIO() {
     httpRequest('POST', '/api/gpio/' + gpio, body, null);
 }
 
+// Shows the modal for the blink GPIO action.
 function showModalBlinkGPIO(event) {
     const gpio = event.target.closest('tr').data.gpio;
     document.getElementById('modalGPIOblinkGPIO').value = gpio;
     modalGPIOblinkInit.show();
 }
 
+// Executes the blink GPIO action.
 function blinkGPIO() {
     const gpio = document.getElementById('modalGPIOblinkGPIO').value;
     const timeout = Number(document.getElementById('modalGPIOblinkTimeout').value)
@@ -97,6 +108,7 @@ function blinkGPIO() {
     httpRequest('POST', '/api/gpio/' + gpio, body, null);
 }
 
+// Gets the details of a GPIO and displays it in a modal.
 function infoGPIO(event) {
     const gpioInfoEl = document.getElementById('modalGPIOinfoList');
     gpioInfoEl.textContent = '';
@@ -117,6 +129,7 @@ function infoGPIO(event) {
     });
 }
 
+// Creates an action button for GPIOs.
 function createActionLink(icon, title, callback) {
     const a = document.createElement('a');
     a.innerHTML = icon;
@@ -130,6 +143,7 @@ function createActionLink(icon, title, callback) {
     return a;
 }
 
+// Returns the action buttons for GPIOs.
 function getGPIOactions(direction) {
     const td = document.createElement('td');
     td.appendChild(createActionLink('&#x1F6C8', 'Info', infoGPIO));
@@ -142,6 +156,7 @@ function getGPIOactions(direction) {
     return td;
 }
 
+// Gets the list of GPIOs and populates the GPIO table.
 function getGPIOs() {
     const gpiosEl = document.getElementById('gpios');
     gpiosEl.textContent = '';
@@ -161,6 +176,7 @@ function getGPIOs() {
     });
 }
 
+// Makes an http request and calls the callback function on success.
 async function httpRequest(method, path, body, callback) {
     const uri = getUri('http') + path;
     let response = null;
@@ -196,10 +212,11 @@ async function httpRequest(method, path, body, callback) {
     }
 }
 
-//main
+// Main
 socketConnect();
 getGPIOs()
 
+// Refresh button event listeners
 document.getElementById('websocketReconnect').addEventListener('click', function(event) {
     event.preventDefault();
     socketConnect();
@@ -210,6 +227,7 @@ document.getElementById('gpioRefresh').addEventListener('click', function(event)
     getGPIOs();
 }, false);
 
+// Add event listeners for the buttons in modals
 document.getElementById('modalGPIOblinkSet').addEventListener('click', function(event) {
     blinkGPIO();
     modalGPIOblinkInit.hide();

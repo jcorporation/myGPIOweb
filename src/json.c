@@ -28,6 +28,14 @@ static const char *escape_char(char c) {
     return NULL;
 }
 
+/**
+ * Append to the sds string "s" a json escaped string
+ * After the call, the modified sds string is no longer valid and all the
+ * references must be substituted with the new pointer returned by the call.
+ * @param s sds string
+ * @param p string to append json escaped
+ * @return modified sds string
+ */
 sds sds_catjson_plain(sds s, const char *p) {
     return sds_catjson_plain_len(s, p, strlen(p));
 }
@@ -84,6 +92,14 @@ sds sds_catjson_plain_len(sds s, const char *p, size_t len) {
     return s;
 }
 
+/**
+ * Append to the sds string "s" a quoted json escaped string
+ * After the call, the modified sds string is no longer valid and all the
+ * references must be substituted with the new pointer returned by the call.
+ * @param s sds string
+ * @param p string to append json escaped
+ * @return modified sds string
+ */
 sds sds_catjson(sds s, const char *p) {
     return sds_catjson_len(s, p, strlen(p));
 }
@@ -106,6 +122,11 @@ sds sds_catjson_len(sds s, const char *p, size_t len) {
     return sdscatlen(s, "\"", 1);
 }
 
+/**
+ * Returns the string representation for a bool value.
+ * @param v bool value
+ * @return bool value as string literal
+ */
 const char *bool_to_str(bool v) {
     return v == true
         ? "true"

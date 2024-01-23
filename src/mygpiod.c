@@ -11,6 +11,11 @@
 
 #include <libmygpio/libmygpio.h>
 
+/**
+ * Disconnects from myGPIOd socket, resets the poll fd's
+ * and sets a reconnection timer
+ * @param state pointer to state
+ */
 void mygpiod_disconnect(struct t_state *state) {
     PRINT_LOG_INFO("Disconnecting from myGPIOd");
     if (state->conn != NULL) {
@@ -22,6 +27,12 @@ void mygpiod_disconnect(struct t_state *state) {
     state->reconnect_time = time(NULL) + 5;
 }
 
+/**
+ * Checks for a connection error state, tries to recover and
+ * disconnects on fatal errors.
+ * @param state pointer to state
+ * @return true on MYGPIO_STATE_OK, else false
+ */
 bool mygpiod_check_error(struct t_state *state) {
     enum mygpio_conn_state conn_state = mygpio_connection_get_state(state->conn);
     if (conn_state == MYGPIO_STATE_OK) {
@@ -38,14 +49,20 @@ bool mygpiod_check_error(struct t_state *state) {
     return false;
 }
 
-bool mygpiod_connect(struct t_state *state, const char *socket, int timeout_ms) {
+/**
+ * Connects to the myGPIOd socket and populates the poll fd's.
+ * @param state pointer to state
+ * @param timeout_ms connection timeout in ms
+ * @return true on success, else false
+ */
+bool mygpiod_connect(struct t_state *state, int timeout_ms) {
     state->reconnect_time = time(NULL) + 5;
     if (state->conn != NULL && mygpio_connection_get_state(state->conn) == MYGPIO_STATE_FATAL) {
         PRINT_LOG_ERROR("myGPIOd connection in FATAL state");
         mygpiod_disconnect(state);
     }
-    PRINT_LOG_INFO("Connecting to myGPIOd socket \"%s\"", socket);
-    state->conn = mygpio_connection_new(socket, timeout_ms);
+    PRINT_LOG_INFO("Connecting to myGPIOd socket \"%s\"", state->socket);
+    state->conn = mygpio_connection_new(state->socket, timeout_ms);
     if (state->conn == NULL) {
         PRINT_LOG_ERROR("Out of memory");
         return false;
@@ -66,7 +83,13 @@ bool mygpiod_connect(struct t_state *state, const char *socket, int timeout_ms) 
     return true;
 }
 
-bool mygpiod_event_handler(struct t_state *state, struct mg_mgr *mgr) {
+/**
+ * Reads idle events from the myGPIOd connection and broadcasts it
+ * to all connected websocket clients.
+ * @param state pointer to state
+ * @param mgr pointer to mongoose mgr
+ */
+void mygpiod_event_handler(struct t_state *state, struct mg_mgr *mgr) {
     PRINT_LOG_INFO("Receiving events");
     struct t_mygpio_idle_event *event;
     while ((event = mygpio_recv_idle_event(state->conn)) != NULL) {
@@ -79,5 +102,4 @@ bool mygpiod_event_handler(struct t_state *state, struct mg_mgr *mgr) {
         mygpio_free_idle_event(event);
     }
     mygpio_response_end(state->conn);
-    return true;
 }

@@ -17,7 +17,7 @@
 
 void mygpiod_disconnect(struct t_state *state);
 bool mygpiod_check_error(struct t_state *state);
-bool mygpiod_connect(struct t_state *state, const char *socket, int timeout_ms);
-bool mygpiod_event_handler(struct t_state *state, struct mg_mgr *mgr);
+bool mygpiod_connect(struct t_state *state, int timeout_ms);
+void mygpiod_event_handler(struct t_state *state, struct mg_mgr *mgr);
 
 #endif

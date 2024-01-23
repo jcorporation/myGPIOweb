@@ -10,14 +10,17 @@
 #include <poll.h>
 #include <time.h>
 
+/**
+ * Struct holding central data and states
+ */
 struct t_state {
-    struct t_mygpio_connection *conn;
-    struct pollfd pfds[1];
-    nfds_t npfds;
-    time_t reconnect_time;
-    char *socket;
-    char *listen_on;
-    char *webroot;
+    struct t_mygpio_connection *conn;  //!< myGPIOD connection
+    struct pollfd pfds[1];             //!< fd's for polling
+    nfds_t npfds;                      //!< number of fd's to poll
+    time_t reconnect_time;             //!< timestamp for next reconnection attempt to myGPIOd
+    char *socket;                      //!< myGPIOd socket path
+    char *listen_on;                   //!< mongoose listening uri
+    char *webroot;                     //!< mongoose document root
 };
 
 void state_clear(struct t_state *state);
