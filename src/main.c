@@ -17,7 +17,11 @@
 #include <poll.h>
 
 int main(int argc, char **argv) {
-    set_loglevel(LOG_DEBUG);
+    #ifdef MYGPIOWEB_DEBUG
+        set_loglevel(LOG_DEBUG);
+    #else
+        set_loglevel(LOG_INFO);
+    #endif
     log_on_tty = isatty(fileno(stdout));
     log_to_syslog = false;
     bool rc = EXIT_FAILURE;
