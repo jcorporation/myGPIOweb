@@ -1,0 +1,19 @@
+/*
+ SPDX-License-Identifier: GPL-3.0-or-later
+ myGPIOd (c) 2020-2024 Juergen Mang <mail@jcgames.de>
+ https://github.com/jcorporation/myGPIOd
+*/
+
+#ifndef COMPILE_TIME_H
+#define COMPILE_TIME_H
+
+// Version and name from cmake
+#define MYGPIOWEB_VERSION "${PROJECT_VERSION}"
+
+// Sanitizers
+#cmakedefine MYGPIOWEB_ENABLE_ASAN
+
+// Features
+#cmakedefine MYGPIOWEB_HTDOCS "${MYGPIOWEB_HTDOCS}"
+
+#endif

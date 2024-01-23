@@ -34,9 +34,9 @@ set(CMAKE_C_FLAGS_RELWITHDEBINFO "")
 set(CMAKE_C_FLAGS_MINSIZEREL "")
 
 # sanitizer options
-option(MYGPIODWEB_ENABLE_ASAN "Enables build with address sanitizer, default OFF" "OFF")
-option(MYGPIODWEB_ENABLE_TSAN "Enables build with thread sanitizer, default OFF" "OFF")
-option(MYGPIODWEB_ENABLE_UBSAN "Enables build with undefined behavior sanitizer, default OFF" "OFF")
+option(MYGPIOWEB_ENABLE_ASAN "Enables build with address sanitizer, default OFF" "OFF")
+option(MYGPIOWEB_ENABLE_TSAN "Enables build with thread sanitizer, default OFF" "OFF")
+option(MYGPIOWEB_ENABLE_UBSAN "Enables build with undefined behavior sanitizer, default OFF" "OFF")
 
 # cmake modules
 include(CheckCCompilerFlag)
@@ -53,10 +53,16 @@ find_package(LIBMYGPIO REQUIRED)
 # set myGPIOD specific debug define
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
   add_compile_options(
-    "-DMYGPIODWEB_DEBUG=ON"
+    "-DMYGPIOWEB_DEBUG=ON"
   )
-  set(MYGPIODWEB_DEBUG "ON")
+  set(MYGPIOWEB_DEBUG "ON")
+  set(MYGPIOWEB_HTDOCS "htdocs")
+else()
+  set(MYGPIOWEB_HTDOCS "${CMAKE_INSTALL_FULL_DATAROOTDIR}/mygpioweb")
 endif()
+
+# configure some files - version and path information
+configure_file(src/compile_time.h.in ${PROJECT_BINARY_DIR}/compile_time.h)
 
 if(CMAKE_BUILD_TYPE MATCHES "(Debug|Release|RelWithDebInfo|MinSizeRel)")
   # set strict global compile flags
@@ -98,7 +104,7 @@ if(CMAKE_BUILD_TYPE MATCHES "(Debug|Release|RelWithDebInfo|MinSizeRel)")
     endif()
   endforeach()
 
-  if(NOT MYGPIODWEB_ENABLE_ASAN)
+  if(NOT MYGPIOWEB_ENABLE_ASAN)
     # incompatible with address sanitizers
     add_compile_options("-D_FORTIFY_SOURCE=2")
   endif()
@@ -114,7 +120,7 @@ set(ASAN_FLAGS
   "-latomic"
 )
 
-if(MYGPIODWEB_ENABLE_ASAN)
+if(MYGPIOWEB_ENABLE_ASAN)
   message("Compiling with address sanitizer")
   add_compile_options(
     ${ASAN_FLAGS}
@@ -146,7 +152,7 @@ else()
 endif()
 
 # linker flags
-if(MYGPIODWEB_ENABLE_ASAN)
+if(MYGPIOWEB_ENABLE_ASAN)
   add_link_options(${ASAN_FLAGS})
 endif()
 
@@ -166,3 +172,13 @@ endif()
 
 add_subdirectory("dist")
 add_subdirectory("src")
+
+# Install document root
+install(FILES
+  htdocs/bootstrap-native.min.js
+  htdocs/bootstrap.css
+  htdocs/index.html
+  htdocs/mygpioweb.css
+  htdocs/mygpioweb.js
+  DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/mygpioweb
+)

@@ -25,6 +25,7 @@ target_sources(mygpioweb PRIVATE
   log.c
   main.c
   mygpiod.c
+  options.c
   state.c
   webserver.c
 )
@@ -35,3 +36,5 @@ target_link_libraries(mygpioweb
   sds
   ${LIBMYGPIO_LIBRARIES}
 )
+
+install(TARGETS mygpioweb DESTINATION ${CMAKE_INSTALL_FULL_BINDIR})

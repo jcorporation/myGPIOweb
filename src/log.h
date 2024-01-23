@@ -13,7 +13,7 @@
 /**
  * Macros for logging
  */
-#ifdef MYGPIODWEB_DEBUG
+#ifdef MYGPIOWEB_DEBUG
     #define PRINT_LOG_EMERG(...) log_log(LOG_EMERG, __FILE__, __LINE__, __VA_ARGS__)
     #define PRINT_LOG_ALERT(...) log_log(LOG_ALERT, __FILE__, __LINE__, __VA_ARGS__)
     #define PRINT_LOG_CRIT(...) log_log(LOG_CRIT, __FILE__, __LINE__, __VA_ARGS__)

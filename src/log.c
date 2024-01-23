@@ -130,7 +130,7 @@ void log_log(int level, const char *file, int line, const char *fmt, ...) {
         }
     }
     printf("%-8s", loglevel_names[level]);
-    #ifdef MYGPIODWEB_DEBUG
+    #ifdef MYGPIOWEB_DEBUG
         printf("%s:%d: ", file, line);
     #else
         (void)file;
