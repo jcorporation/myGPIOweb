@@ -59,9 +59,7 @@ function toggleGPIO(event) {
         "action": "gpiotoggle"
     });
     const gpio = event.target.closest('tr').data.gpio;
-    httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
-        updateGPIOvalue(gpio);
-    });
+    httpRequest('POST', '/api/gpio/' + gpio, body, null);
 }
 
 function showModalSetGPIO(event) {
@@ -78,9 +76,7 @@ function setGPIO() {
         "action": "gpioset",
         "value": value
     });
-    httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
-        updateGPIOvalue(gpio);
-    });
+    httpRequest('POST', '/api/gpio/' + gpio, body, null);
 }
 
 function showModalBlinkGPIO(event) {
@@ -98,9 +94,7 @@ function blinkGPIO() {
         "timeout": timeout,
         "interval": interval
     });
-    httpRequest('POST', '/api/gpio/' + gpio, body, function(data) {
-        updateGPIOvalue(gpio);
-    });
+    httpRequest('POST', '/api/gpio/' + gpio, body, null);
 }
 
 function infoGPIO(event) {
@@ -195,7 +189,9 @@ async function httpRequest(method, path, body, callback) {
         setError(data.error);
     }
     else {
-        callback(data);
+        if (callback !== null) {
+            callback(data);
+        }
         setError('OK');
     }
 }
