@@ -34,6 +34,7 @@ void mygpiod_disconnect(struct t_state *state) {
  * @return true on MYGPIO_STATE_OK, else false
  */
 bool mygpiod_check_error(struct t_state *state) {
+    PRINT_LOG_DEBUG("Checking myGPIOd connection state");
     enum mygpio_conn_state conn_state = mygpio_connection_get_state(state->conn);
     if (conn_state == MYGPIO_STATE_OK) {
         return true;
@@ -70,6 +71,7 @@ bool mygpiod_connect(struct t_state *state, int timeout_ms) {
     if (mygpiod_check_error(state) == false) {
         return false;
     }
+    PRINT_LOG_DEBUG("Entering idle mode");
     if (mygpio_send_idle(state->conn) == false) {
         PRINT_LOG_ERROR("Unable to send idle command");
     }
@@ -79,7 +81,7 @@ bool mygpiod_connect(struct t_state *state, int timeout_ms) {
     }
     state->pfds[0].fd = mygpio_connection_get_fd(state->conn);
     state->npfds = 1;
-    mygpio_response_end(state->conn);
+    PRINT_LOG_INFO("Connected");
     return true;
 }
 

@@ -46,6 +46,7 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
         if (mygpio_send_noidle(state->conn) == false ||
             mygpiod_check_error(state) == false)
         {
+            PRINT_LOG_ERROR("Error exiting idle mode");
             mygpiod_disconnect(state);
         }
         else {
