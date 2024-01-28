@@ -54,6 +54,11 @@ int main(int argc, char **argv) {
             goto cleanup;
     }
 
+    // open syslog connection
+    if (log_to_syslog == true) {
+        openlog(MYGPIOWEB_NAME, LOG_CONS, LOG_DAEMON);
+    }
+
     // init webserver
     struct mg_mgr mgr;
     mg_mgr_init(&mgr);

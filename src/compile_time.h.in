@@ -9,6 +9,7 @@
 
 // Version and name from cmake
 #define MYGPIOWEB_VERSION "${PROJECT_VERSION}"
+#define MYGPIOWEB_NAME "myGPIOweb"
 
 // Sanitizers
 #cmakedefine MYGPIOWEB_ENABLE_ASAN
