@@ -5,7 +5,7 @@ const modalGPIOinfoInit = BSN.Modal.getInstance(document.getElementById('modalGP
 const modalGPIOsetInit = BSN.Modal.getInstance(document.getElementById('modalGPIOset'));
 const modalGPIOblinkInit = BSN.Modal.getInstance(document.getElementById('modalGPIOblink'));
 
-// Caclulates the uri for websocket and http requests.
+// Calculates the uri for websocket and http requests.
 function getUri(proto) {
     const protocol = proto === 'ws'
         ? window.location.protocol === 'https:'
@@ -38,12 +38,39 @@ function socketConnect() {
         document.getElementById('websocketState').textContent = 'Disconnected';
     }
     socket.onmessage = function(msg) {
-        const msgRow = document.createElement('pre');
-        msgRow.textContent = msg.data;
-        document.getElementById('events').appendChild(msgRow);
-        const obj = JSON.parse(msg.data);
-        updateGPIOvalue(obj.gpio);
+        parseWebsocketMsg(msg.data);
     }
+}
+
+// Parses the websocket message.
+function parseWebsocketMsg(data) {
+    let obj;
+    try {
+        obj = JSON.parse(data);
+        document.getElementById('websocketState').textContent = 'Connected';
+    }
+    catch(error) {
+        document.getElementById('websocketState').textContent = 'Unable to parse event';
+        console.error(error);
+        return;
+    }
+    const tr = document.createElement('tr');
+    const tdGPIO = document.createElement('td');
+    tdGPIO.textContent = obj.gpio;
+    const tdEvent = document.createElement('td');
+    tdEvent.textContent = obj.event;
+    const tdTimestamp = document.createElement('td');
+    tdTimestamp.textContent = obj.ts_ms;
+    tr.appendChild(tdGPIO);
+    tr.appendChild(tdEvent);
+    tr.appendChild(tdTimestamp);
+    document.getElementById('events').appendChild(tr);
+    updateGPIOvalue(obj.gpio);
+}
+
+// Clears the events table.
+function clearEvents() {
+    document.getElementById('events').textContent = '';
 }
 
 // Gets and updates the value of a GPIO.
@@ -192,6 +219,7 @@ async function httpRequest(method, path, body, callback) {
     }
     catch(error) {
         setError('REST API error for ' + method + ' ' + uri);
+        console.error(error);
         return;
     }
     let data = null;
@@ -200,6 +228,7 @@ async function httpRequest(method, path, body, callback) {
     }
     catch(error) {
         setError('Can not parse response from ' + uri);
+        console.error(error);
     }
     if (data.error) {
         setError(data.error);
@@ -220,6 +249,11 @@ getGPIOs()
 document.getElementById('websocketReconnect').addEventListener('click', function(event) {
     event.preventDefault();
     socketConnect();
+}, false);
+
+document.getElementById('clearEvents').addEventListener('click', function(event) {
+    event.preventDefault();
+    clearEvents();
 }, false);
 
 document.getElementById('gpioRefresh').addEventListener('click', function(event) {
