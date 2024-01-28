@@ -17,8 +17,8 @@
  * @param state pointer to state
  */
 void mygpiod_disconnect(struct t_state *state) {
-    PRINT_LOG_INFO("Disconnecting from myGPIOd");
     if (state->conn != NULL) {
+        PRINT_LOG_INFO("Disconnecting from myGPIOd");
         mygpio_connection_free(state->conn);
         state->conn = NULL;
     }
