@@ -151,7 +151,7 @@ function getGPIOactions(direction) {
     if (direction === 'out') {
         td.appendChild(createActionLink('&#x25e9', 'Toggle', toggleGPIO));
         td.appendChild(createActionLink('&#x2713', 'Set', showModalSetGPIO));
-        td.appendChild(createActionLink('&#x2606', 'Blink', showModalBlinkGPIO));
+        td.appendChild(createActionLink('&#x2605', 'Blink', showModalBlinkGPIO));
     }
     return td;
 }
