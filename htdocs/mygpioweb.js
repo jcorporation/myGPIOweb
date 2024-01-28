@@ -54,6 +54,9 @@ function parseWebsocketMsg(data) {
         console.error(error);
         return;
     }
+    // update GPIO list
+    updateGPIOvalue(obj.gpio);
+    // append event
     const tr = document.createElement('tr');
     const tdGPIO = document.createElement('td');
     tdGPIO.textContent = obj.gpio;
@@ -64,8 +67,12 @@ function parseWebsocketMsg(data) {
     tr.appendChild(tdGPIO);
     tr.appendChild(tdEvent);
     tr.appendChild(tdTimestamp);
-    document.getElementById('events').appendChild(tr);
-    updateGPIOvalue(obj.gpio);
+    const eventsEl = document.getElementById('events');
+    eventsEl.prepend(tr);
+    // enforce event list size
+    if (eventsEl.childElementCount > 10) {
+        eventsEl.removeChild(eventsEl.lastChild);
+    }
 }
 
 // Clears the events table.
