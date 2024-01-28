@@ -13,7 +13,7 @@ This project provides a simple webfrontend for myGPIOd. It uses the libmygpio li
 
 ## Run
 
-```
+```sh
 mygpioweb [option]...
 ```
 
@@ -24,7 +24,6 @@ mygpioweb [option]...
 | `-o`, `--syslog` | enable syslog logging (facility: daemon) |
 | `-h`, `--help` | displays this help |
 | `-v`, `--version` | displays this help |
-
 
 ## Provided endpoints
 

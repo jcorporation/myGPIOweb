@@ -3,10 +3,7 @@ body {
     padding-left: 0 !important;
 }
 
-nav {
-    background-color: var(--bs-gray-900);
-}
-
+nav,
 .card-header,
 .card-footer {
     background-color: var(--bs-gray-900);
