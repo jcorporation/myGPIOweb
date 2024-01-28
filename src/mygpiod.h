@@ -15,6 +15,7 @@
 #include <syslog.h>
 #include <time.h>
 
+void mygpiod_poll(struct t_state *state, struct mg_mgr *mgr);
 void mygpiod_disconnect(struct t_state *state);
 bool mygpiod_check_error(struct t_state *state);
 bool mygpiod_connect(struct t_state *state, int timeout_ms);

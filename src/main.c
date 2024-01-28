@@ -26,8 +26,8 @@ int main(int argc, char **argv) {
     log_to_syslog = false;
     bool rc = EXIT_FAILURE;
 
-    setvbuf(stdout, NULL, _IOLBF, 0);
-    setvbuf(stderr, NULL, _IOLBF, 0);
+    (void)setvbuf(stdout, NULL, _IOLBF, 0);
+    (void)setvbuf(stderr, NULL, _IOLBF, 0);
 
     struct t_state state = {
         .conn = NULL,
@@ -70,36 +70,7 @@ int main(int argc, char **argv) {
     // main event loop
     for (;;) {
         mg_mgr_poll(&mgr, 50);
-        if (state.npfds > 0) {
-            errno = 0;
-            int revents = poll(state.pfds, 1, 50);
-            if (revents > 0) {
-                if (revents & POLLIN) {
-                    PRINT_LOG_DEBUG("Events waiting");
-                    mygpiod_event_handler(&state, &mgr);
-                    if (mygpio_send_idle(state.conn) == false) {
-                        PRINT_LOG_ERROR("Unable to send idle command");
-                    }
-                    if (mygpiod_check_error(&state) == false) {
-                        mygpiod_disconnect(&state);
-                    }
-                }
-                else if (revents & (POLLERR | POLLNVAL | POLLHUP)) {
-                    PRINT_LOG_ERROR("Poll error: %s", strerror(errno));
-                    mygpiod_disconnect(&state);
-                }
-            }
-            else if (revents == -1) {
-                PRINT_LOG_ERROR("Poll error: %s", strerror(errno));
-                mygpiod_disconnect(&state);
-            }
-        }
-        else {
-            time_t now = time(NULL);
-            if (now > state.reconnect_time) {
-                mygpiod_connect(&state, 5000);
-            }
-        }
+        mygpiod_poll(&state, &mgr);
     }
     rc = EXIT_SUCCESS;
 

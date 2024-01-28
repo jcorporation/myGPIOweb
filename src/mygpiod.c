@@ -12,6 +12,44 @@
 #include <libmygpio/libmygpio.h>
 
 /**
+ * Polls myGPIOd socket
+ * @param state pointer to state
+ * @param mgr mongoose mgr
+ */
+void mygpiod_poll(struct t_state *state, struct mg_mgr *mgr) {
+    if (state->npfds > 0) {
+        errno = 0;
+        int revents = poll(state->pfds, 1, 50);
+        if (revents > 0) {
+            if (revents & POLLIN) {
+                PRINT_LOG_DEBUG("Events waiting");
+                mygpiod_event_handler(state, mgr);
+                if (mygpio_send_idle(state->conn) == false) {
+                    PRINT_LOG_ERROR("Unable to send idle command");
+                }
+                if (mygpiod_check_error(state) == false) {
+                    mygpiod_disconnect(state);
+                }
+            }
+            else if (revents & (POLLERR | POLLNVAL | POLLHUP)) {
+                PRINT_LOG_ERROR("Poll error: %s", strerror(errno));
+                mygpiod_disconnect(state);
+            }
+        }
+        else if (revents == -1) {
+            PRINT_LOG_ERROR("Poll error: %s", strerror(errno));
+            mygpiod_disconnect(state);
+        }
+    }
+    else {
+        time_t now = time(NULL);
+        if (now > state->reconnect_time) {
+            mygpiod_connect(state, 5000);
+        }
+    }
+}
+
+/**
  * Disconnects from myGPIOd socket, resets the poll fd's
  * and sets a reconnection timer
  * @param state pointer to state

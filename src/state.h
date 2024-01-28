@@ -14,7 +14,7 @@
  * Struct holding central data and states
  */
 struct t_state {
-    struct t_mygpio_connection *conn;  //!< myGPIOD connection
+    struct t_mygpio_connection *conn;  //!< myGPIOd connection
     struct pollfd pfds[1];             //!< fd's for polling
     nfds_t npfds;                      //!< number of fd's to poll
     time_t reconnect_time;             //!< timestamp for next reconnection attempt to myGPIOd
