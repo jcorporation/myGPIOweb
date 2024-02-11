@@ -1,0 +1,24 @@
+name: release
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - name: installdeps
+      run: sudo apt-get -y install cmake build-essential git
+    - name: build libmygpio
+      run: |
+        git clone --depth=1 https://github.com/jcorporation/mygpiod.git
+        cd mygpiod
+        cmake -B "release" -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release -DMYGPIOD_DAEMON=OFF -DMYGPIOD_CLIENT=OFF -DMYGPIOD_MANPAGES=OFF -DMYGPIOD_DOC=OFF .
+        make -j4 -C "release"
+        sudo make -C "release" install
+    - name: build myGPIOweb
+      run: |
+        cmake -B release -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release .
+        make -C release
+        sudo make -C release install
