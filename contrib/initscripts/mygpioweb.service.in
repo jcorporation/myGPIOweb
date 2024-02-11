@@ -1,0 +1,30 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# myMPD (c) 2020-2024 Juergen Mang <mail@jcgames.de>
+# https://github.com/jcorporation/mygpiod
+
+[Unit]
+Description=myGPIOweb
+Requires=local-fs.target
+
+[Service]
+DynamicUser=yes
+SupplementaryGroups=mygpiod
+ExecStart=@CMAKE_INSTALL_FULL_BINDIR@/mygpioweb
+LockPersonality=yes
+PrivateDevices=no
+ProtectClock=yes
+ProtectControlGroups=yes
+ProtectHome=yes
+ProtectHostname=yes
+ProtectKernelLogs=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+ProtectProc=invisible
+RestrictRealtime=yes
+RestrictAddressFamilies=AF_INET AF_INET6 AF_NETLINK AF_UNIX
+RestrictNamespaces=yes
+SystemCallArchitectures=native
+SystemCallFilter=@system-service
+
+[Install]
+WantedBy=multi-user.target

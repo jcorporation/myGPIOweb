@@ -63,6 +63,7 @@ endif()
 
 # configure some files - version and path information
 configure_file(src/compile_time.h.in ${PROJECT_BINARY_DIR}/compile_time.h)
+configure_file(contrib/initscripts/mygpioweb.service.in contrib/initscripts/mygpioweb.service @ONLY)
 
 if(CMAKE_BUILD_TYPE MATCHES "(Debug|Release|RelWithDebInfo|MinSizeRel)")
   # set strict global compile flags
