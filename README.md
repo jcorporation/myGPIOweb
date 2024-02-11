@@ -38,15 +38,11 @@ Sends idle events from myGPIOd to connected clients.
 
 ### REST Endpoints
 
+- [OpenAPI-Documentation](openapi.yml)
+
 | Path | Method | Command |
 | ---- | ------ | ----------- |
 | `/api/gpio` | GET | gpiolist |
 | `/api/gpio/{gpio number}` | GET | gpioget |
 | `/api/gpio/{gpio number}` | OPTIONS | gpioinfo |
-| `/api/gpio/{gpio number}` | POST | gpioblink, gpioset, gpiotoggle |
-
-#### POST /api/gpio/{gpio number}
-
-- gpioblink: `{"action": "gpioblink", "timeout": <ms>, "interval": <ms>}`
-- gpioset: `{"action": "gpioset", "value": "active|inactive"}`
-- gpiotoggle: `{"action": "gpiotoggle"}`
+| `/api/gpio/{gpio number}/{blink, set, toggle}` | POST | gpioblink, gpioset, gpiotoggle |

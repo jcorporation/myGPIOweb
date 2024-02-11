@@ -144,22 +144,17 @@ sds api_gpio_gpio_options(struct t_state *state, sds buffer, unsigned gpio_nr, b
  * @param state pointer to state
  * @param buffer already allocated buffer to populate with the response
  * @param gpio_nr gpio number
+ * @param action action for the gpio, one of blink, set, toggle
  * @param hm mongoose http message struct
  * @param rc pointer to bool to set the result code
  * @return sds pointer to buffer
  */
-sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, struct mg_http_message *hm, bool *rc) {
+sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, struct mg_str *action, struct mg_http_message *hm, bool *rc) {
     char *value_str = NULL;
     long timeout;
     long interval;
     enum mygpio_gpio_value value;
-    char *action = mg_json_get_str(hm->body, "$.action");
-    if (action == NULL) {
-        *rc = false;
-        PRINT_LOG_ERROR("No action for uri %.*s", (int)hm->uri.len, hm->uri.ptr);
-        return buffer;
-    }
-    if (strcmp(action, "gpioblink") == 0 &&
+    if (mg_vcmp(action, "blink") == 0 &&
         (timeout = mg_json_get_long(hm->body, "$.timeout", -1)) > -1 &&
         (interval = mg_json_get_long(hm->body, "$.interval", -1)) > -1 &&
         timeout < INT_MAX &&
@@ -168,19 +163,19 @@ sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, stru
         *rc = mygpio_gpioblink(state->conn, gpio_nr, (int)timeout, (int)interval) ||
             mygpiod_check_error(state);
     }
-    else if (strcmp(action, "gpioset") == 0 &&
+    else if (mg_vcmp(action, "set") == 0 &&
              (value_str = mg_json_get_str(hm->body, "$.value")) != NULL &&
              (value = mygpio_gpio_parse_value(value_str)) != MYGPIO_GPIO_VALUE_UNKNOWN)
     {
         *rc = mygpio_gpioset(state->conn, gpio_nr, value) ||
             mygpiod_check_error(state);
     }
-    else if (strcmp(action, "gpiotoggle") == 0) {
+    else if (mg_vcmp(action, "toggle") == 0) {
         *rc = mygpio_gpiotoggle(state->conn, gpio_nr) ||
             mygpiod_check_error(state);
     }
     else {
-        PRINT_LOG_ERROR("Invalid action \"%s\" or values for uri %.*s", action, (int)hm->uri.len, hm->uri.ptr);
+        PRINT_LOG_ERROR("Invalid action \"%.*s\" or values for uri %.*s", (int)action->len, action->ptr, (int)hm->uri.len, hm->uri.ptr);
     }
     free(action);
     if (value_str != NULL) {

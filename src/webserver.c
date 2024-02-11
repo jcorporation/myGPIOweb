@@ -51,11 +51,22 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
         }
         else {
             mygpiod_event_handler(state, nc->mgr);
-            struct mg_str caps[2];
+            struct mg_str caps[3];
             if (mg_http_match_uri(hm, "/api/gpio") == true &&
                 mg_vcmp(&hm->method, "GET") == 0)
             {
                 buffer = api_gpio_get(state, buffer, &rc);
+            }
+            else if (mg_match(hm->uri, mg_str("/api/gpio/*/*"), caps) == true) {
+                unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
+                if (gpio < 99) {
+                    if (mg_vcmp(&hm->method, "POST") == 0) {
+                        buffer = api_gpio_gpio_post(state, buffer, gpio, caps[1], hm, &rc);
+                    }
+                }
+                else {
+                    PRINT_LOG_ERROR("Invalid gpio");
+                }
             }
             else if (mg_match(hm->uri, mg_str("/api/gpio/*"), caps) == true) {
                 unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
@@ -65,9 +76,6 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
                     }
                     else if (mg_vcmp(&hm->method, "OPTIONS") == 0) {
                         buffer = api_gpio_gpio_options(state, buffer, gpio, &rc);
-                    }
-                    else if (mg_vcmp(&hm->method, "POST") == 0) {
-                        buffer = api_gpio_gpio_post(state, buffer, gpio, hm, &rc);
                     }
                 }
                 else {
