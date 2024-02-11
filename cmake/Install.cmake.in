@@ -1,0 +1,47 @@
+# SPDX-License-Identifier: GPL-3.0-or-later
+# myMPD (c) 2020-2024 Juergen Mang <mail@jcgames.de>
+# https://github.com/jcorporation/mygpioweb
+
+# Install startup script
+function(install_systemd)
+  file(INSTALL "@CMAKE_CURRENT_BINARY_DIR@/contrib/initscripts/mygpioweb.service"
+       DESTINATION "/usr/lib/systemd/system"
+       FILE_PERMISSIONS OWNER_WRITE OWNER_READ GROUP_READ WORLD_READ)
+endfunction()
+
+function(install_openrc)
+  file(RENAME "@CMAKE_CURRENT_BINARY_DIR@/contrib/initscripts/mygpioweb.openrc"
+       "@CMAKE_CURRENT_BINARY_DIR@/contrib/initscripts/mygpioweb")
+  file(INSTALL "@CMAKE_CURRENT_BINARY_DIR@/contrib/initscripts/mygpioweb"
+       DESTINATION "/etc/init.d"
+       FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+endfunction()
+
+function(install_sysvinit)
+  file(RENAME "@CMAKE_CURRENT_BINARY_DIR@/contrib/initscripts/mygpioweb.sysVinit"
+       "@CMAKE_CURRENT_BINARY_DIR@/contrib/initscripts/mygpioweb")
+  file(INSTALL "@CMAKE_CURRENT_BINARY_DIR@/contrib/initscripts/mygpioweb"
+       DESTINATION "/etc/init.d"
+       FILE_PERMISSIONS OWNER_WRITE OWNER_READ OWNER_EXECUTE GROUP_READ GROUP_EXECUTE WORLD_READ WORLD_EXECUTE)
+endfunction()
+
+if("@MYGPIOWEB_DAEMON@" STREQUAL "ON")
+  if("@MYGPIOWEB_STARTUP_SCRIPT@" STREQUAL "ON")
+    # Try to detect installed init system
+    if(EXISTS "/lib/systemd/system" OR EXISTS "/usr/lib/systemd/system")
+      install_systemd()
+    elseif(EXISTS "/sbin/openrc-run")
+      install_openrc()
+    elseif(EXISTS "/etc/init.d")
+      install_sysvinit()
+    else()
+      message("No supported init system found, no startup script was installed")
+    endif()
+  elseif("@MYGPIOWEB_STARTUP_SCRIPT@" STREQUAL "SYSTEMD")
+    install_systemd()
+  elseif("@MYGPIOWEB_STARTUP_SCRIPT@" STREQUAL "OPENRC")
+    install_openrc()
+  elseif("@MYGPIOWEB_STARTUP_SCRIPT@" STREQUAL "SYSVINIT")
+    install_sysvinit()
+  endif()
+endif()

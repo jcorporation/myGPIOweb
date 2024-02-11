@@ -76,10 +76,35 @@ buildrelease() {
 
 installrelease() {
   echo "Installing myGPIOweb"
+  addmygpiowebuser
   cd release || exit 1  
   [ -z "${DESTDIR+x}" ] && DESTDIR=""
   make install DESTDIR="$DESTDIR"
   echo "myGPIOweb installed"
+}
+
+addmygpiowebuser() {
+  echo "Checking status of mygpioweb system user"
+  if ! getent passwd mygpioweb > /dev/null
+  then
+    if check_cmd_silent useradd
+    then
+      groupadd -r mygpiod || true
+      groupadd -r mygpioweb || true
+      useradd -r -g mygpioweb -G mygpiod -s /bin/false -d /var/lib/mygpioweb mygpioweb
+    elif check_cmd_silent adduser
+    then
+      #alpine
+      addgroup -S mygpiod || true
+      addgroup -S mygpioweb || true
+      adduser -S -D -H -h /var/lib/mygpioweb -s /sbin/nologin -G mygpioweb -g myGPIOweb mygpioweb
+      adduser mygpioweb mygpiod
+    else
+      echo "Can not add user mygpioweb"
+      return 1
+    fi
+  fi
+  return 0
 }
 
 check() {
@@ -144,6 +169,7 @@ case "$ACTION" in
     echo "  asan|tsan|ubsan:  builds debug files in directory debug"
     echo "                    linked with the sanitizer"
     echo "  check:            runs clang-tidy on source files"
+    echo "  addmygpiowebuser: adds mygpioweb group and user"
     echo ""
     exit 1
   ;;

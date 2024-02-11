@@ -33,6 +33,9 @@ set(CMAKE_C_FLAGS_RELEASE "")
 set(CMAKE_C_FLAGS_RELWITHDEBINFO "")
 set(CMAKE_C_FLAGS_MINSIZEREL "")
 
+# options
+option(MYGPIOWEB_STARTUP_SCRIPT "Installs the startup script, default ON" "ON")
+
 # sanitizer options
 option(MYGPIOWEB_ENABLE_ASAN "Enables build with address sanitizer, default OFF" "OFF")
 option(MYGPIOWEB_ENABLE_TSAN "Enables build with thread sanitizer, default OFF" "OFF")
@@ -63,7 +66,10 @@ endif()
 
 # configure some files - version and path information
 configure_file(src/compile_time.h.in ${PROJECT_BINARY_DIR}/compile_time.h)
+configure_file(cmake/Install.cmake.in cmake/Install.cmake @ONLY)
+configure_file(contrib/initscripts/mygpioweb.openrc.in contrib/initscripts/mygpioweb.openrc @ONLY)
 configure_file(contrib/initscripts/mygpioweb.service.in contrib/initscripts/mygpioweb.service @ONLY)
+configure_file(contrib/initscripts/mygpioweb.sysVinit.in contrib/initscripts/mygpioweb.sysVinit @ONLY)
 
 if(CMAKE_BUILD_TYPE MATCHES "(Debug|Release|RelWithDebInfo|MinSizeRel)")
   # set strict global compile flags
@@ -183,3 +189,6 @@ install(FILES
   htdocs/mygpioweb.js
   DESTINATION ${CMAKE_INSTALL_FULL_DATAROOTDIR}/mygpioweb
 )
+
+# install
+install(SCRIPT ${CMAKE_CURRENT_BINARY_DIR}/cmake/Install.cmake)
