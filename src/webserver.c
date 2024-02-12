@@ -61,7 +61,7 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
                 unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
                 if (gpio < 99) {
                     if (mg_vcmp(&hm->method, "POST") == 0) {
-                        buffer = api_gpio_gpio_post(state, buffer, gpio, caps[1], hm, &rc);
+                        buffer = api_gpio_gpio_post(state, buffer, gpio, &caps[1], hm, &rc);
                     }
                 }
                 else {
