@@ -15,7 +15,7 @@ paths:
     get:
       tags:
         - gpio
-      summary: list all configured GPIOs
+      summary: List all configured GPIOs
       responses:
         '200':
           description: Successful operation
@@ -37,10 +37,12 @@ paths:
         required: true
         schema:
           type: number
+          minimum: 0
+          maximum: 99
     get:
       tags:
         - gpio
-      summary: Gets the GPIOs current value
+      summary: Get the GPIOs current value
       responses:
         '200':
           description: Successful operation
@@ -58,7 +60,7 @@ paths:
     options:
       tags:
         - gpio
-      summary: Gets the GPIOs configuration
+      summary: Get the GPIO settings
       responses:
         '200':
           description: Successful operation
@@ -80,6 +82,8 @@ paths:
         required: true
         schema:
           type: number
+          minimum: 0
+          maximum: 99
     post:
       tags:
         - gpio
@@ -110,6 +114,8 @@ paths:
         required: true
         schema:
           type: number
+          minimum: 0
+          maximum: 99
     post:
       tags:
         - gpio
@@ -140,6 +146,8 @@ paths:
         required: true
         schema:
           type: number
+          minimum: 0
+          maximum: 99
     post:
       tags:
         - gpio
@@ -167,7 +175,27 @@ components:
   schemas:
     gpio_value:
       type: string
-      enum: [ active, inactive]
+      enum: [active, inactive]
+
+    gpio_direction:
+      type: string
+      enum: [in, out]
+
+    gpio_drive:
+      type: string
+      enum: [push-pull, open-drain, open-source]
+
+    gpio_bias:
+      type: string
+      enum: [disable, pull-down, pull-up]
+
+    gpio_event_request:
+      type: string
+      enum: [falling, rising, both]
+    
+    gpio_event_clock:
+      type: string
+      enum: [monotonic, realtime, hte]
 
     req_gpioblink:
       type: object
@@ -215,7 +243,16 @@ components:
             properties:
               gpio:
                 type: number
-              # TODO: add all properties
+              direction:
+                type: string
+                description: GPIO direction
+                oneOf:
+                  - $ref: '#/components/schemas/gpio_direction'
+              value:
+                type: string
+                description: GPIO active state
+                oneOf:
+                  - $ref: '#/components/schemas/gpio_value'
         entries:
           type: number
           description: GPIO count
@@ -238,9 +275,42 @@ components:
         gpio:
           type: number
           description: GPIO number
+        direction:
+          type: string
+          description: GPIO direction
+          oneOf:
+            - $ref: '#/components/schemas/gpio_direction'
         value:
           type: string
           description: GPIO active state
           oneOf:
             - $ref: '#/components/schemas/gpio_value'
-        # TODO: add all properties
+        active_low:
+          type: boolean
+          description: Is active state low?
+        bias:
+          type: string
+          description: Bias value
+          oneOf:
+            - $ref: '#/components/schemas/gpio_bias'
+        event_request:
+          type: string
+          description: Requested events
+          oneOf:
+            - $ref: '#/components/schemas/gpio_event_request'
+        is_debounced:
+          type: boolean
+          description: Debouncing enabled?
+        debounce_period_us:
+          type: number
+          description: Debounce period in microseconds
+        event_clock:
+          type: string
+          description: Event clock
+          oneOf:
+            - $ref: '#/components/schemas/gpio_event_clock'
+        drive:
+          type: string
+          description: The drive value. Only for output GPIOs.
+          oneOf:
+            - $ref: '#/components/schemas/gpio_drive'
