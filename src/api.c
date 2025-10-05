@@ -1,7 +1,7 @@
 /*
  SPDX-License-Identifier: GPL-3.0-or-later
- myGPIOd (c) 2020-2024 Juergen Mang <mail@jcgames.de>
- https://github.com/jcorporation/myGPIOd
+ myGPIOweb (c) 2024-2025 Juergen Mang <mail@jcgames.de>
+ https://github.com/jcorporation/myGPIOweb
 */
 
 #include "src/api.h"
@@ -154,7 +154,7 @@ sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, stru
     long timeout;
     long interval;
     enum mygpio_gpio_value value;
-    if (mg_vcmp(action, "blink") == 0 &&
+    if (mg_strcmp(*action, mg_str("blink")) == 0 &&
         (timeout = mg_json_get_long(hm->body, "$.timeout", -1)) > -1 &&
         (interval = mg_json_get_long(hm->body, "$.interval", -1)) > -1 &&
         timeout < INT_MAX &&
@@ -163,19 +163,19 @@ sds api_gpio_gpio_post(struct t_state *state, sds buffer, unsigned gpio_nr, stru
         *rc = mygpio_gpioblink(state->conn, gpio_nr, (int)timeout, (int)interval) ||
             mygpiod_check_error(state);
     }
-    else if (mg_vcmp(action, "set") == 0 &&
+    else if (mg_strcmp(*action, mg_str("set")) == 0 &&
              (value_str = mg_json_get_str(hm->body, "$.value")) != NULL &&
              (value = mygpio_gpio_parse_value(value_str)) != MYGPIO_GPIO_VALUE_UNKNOWN)
     {
         *rc = mygpio_gpioset(state->conn, gpio_nr, value) ||
             mygpiod_check_error(state);
     }
-    else if (mg_vcmp(action, "toggle") == 0) {
+    else if (mg_strcmp(*action, mg_str("toggle")) == 0) {
         *rc = mygpio_gpiotoggle(state->conn, gpio_nr) ||
             mygpiod_check_error(state);
     }
     else {
-        PRINT_LOG_ERROR("Invalid action \"%.*s\" or values for uri %.*s", (int)action->len, action->ptr, (int)hm->uri.len, hm->uri.ptr);
+        PRINT_LOG_ERROR("Invalid action \"%.*s\" or values for uri %.*s", (int)action->len, action->buf, (int)hm->uri.len, hm->uri.buf);
     }
     free(action);
     if (value_str != NULL) {

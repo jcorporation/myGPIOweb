@@ -1,8 +1,8 @@
 #!/bin/sh
 #
 # SPDX-License-Identifier: GPL-3.0-or-later
-# myGPIOd (c) 2020-2024 Juergen Mang <mail@jcgames.de>
-# https://github.com/jcorporation/myGPIOd
+# myGPIOd (c) 2024-2025 Juergen Mang <mail@jcgames.de>
+# https://github.com/jcorporation/myGPIOweb
 
 #save script path and change to it
 STARTPATH=$(dirname "$(realpath "$0")")

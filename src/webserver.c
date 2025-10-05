@@ -1,7 +1,7 @@
 /*
  SPDX-License-Identifier: GPL-3.0-or-later
- myGPIOd (c) 2020-2024 Juergen Mang <mail@jcgames.de>
- https://github.com/jcorporation/myGPIOd
+ myGPIOweb (c) 2024-2025 Juergen Mang <mail@jcgames.de>
+ https://github.com/jcorporation/myGPIOweb
 */
 
 #include "src/webserver.h"
@@ -52,15 +52,15 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
         else {
             mygpiod_event_handler(state, nc->mgr);
             struct mg_str caps[3];
-            if (mg_http_match_uri(hm, "/api/gpio") == true &&
-                mg_vcmp(&hm->method, "GET") == 0)
+            if (mg_strcmp(hm->uri, mg_str("/api/gpio")) == true &&
+                mg_strcmp(hm->method, mg_str("GET")) == 0)
             {
                 buffer = api_gpio_get(state, buffer, &rc);
             }
             else if (mg_match(hm->uri, mg_str("/api/gpio/*/*"), caps) == true) {
-                unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
+                unsigned gpio = (unsigned)strtoul(caps[0].buf, NULL, 10);
                 if (gpio < 99) {
-                    if (mg_vcmp(&hm->method, "POST") == 0) {
+                    if (mg_strcmp(hm->method, mg_str("POST")) == 0) {
                         buffer = api_gpio_gpio_post(state, buffer, gpio, &caps[1], hm, &rc);
                     }
                 }
@@ -69,12 +69,12 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
                 }
             }
             else if (mg_match(hm->uri, mg_str("/api/gpio/*"), caps) == true) {
-                unsigned gpio = (unsigned)strtoul(caps[0].ptr, NULL, 10);
+                unsigned gpio = (unsigned)strtoul(caps[0].buf, NULL, 10);
                 if (gpio < 99) {
-                    if (mg_vcmp(&hm->method, "GET") == 0) {
+                    if (mg_strcmp(hm->method, mg_str("GET")) == 0) {
                         buffer = api_gpio_gpio_get(state, buffer, gpio, &rc);
                     }
-                    else if (mg_vcmp(&hm->method, "OPTIONS") == 0) {
+                    else if (mg_strcmp(hm->method, mg_str("OPTIONS")) == 0) {
                         buffer = api_gpio_gpio_options(state, buffer, gpio, &rc);
                     }
                 }
@@ -105,28 +105,26 @@ void api_handler(struct t_state *state, struct mg_connection *nc, struct mg_http
  * @param nc client connection
  * @param ev event type
  * @param ev_data event data
- * @param fn_data user data (unused)
  */
-void webserver_handler(struct mg_connection *nc, int ev, void *ev_data, void *fn_data) {
+void webserver_handler(struct mg_connection *nc, int ev, void *ev_data) {
     if (ev == MG_EV_HTTP_MSG) {
         struct mg_http_message *hm = (struct mg_http_message *)ev_data;
         struct t_state *state = (struct t_state *)nc->mgr->userdata;
 
-        if (mg_http_match_uri(hm, "/ws")) {
+        if (mg_strcmp(hm->uri, mg_str("/ws"))) {
             PRINT_LOG_INFO("Websocket handshake");
             mg_ws_upgrade(nc, hm, NULL);
         }
-        else if (mg_http_match_uri(hm, "/api/#")) {
-            PRINT_LOG_INFO("REST call %.*s %.*s", (int)hm->method.len, hm->method.ptr, (int)hm->uri.len, hm->uri.ptr);
+        else if (mg_match(hm->uri, mg_str("/api/#"), NULL)) {
+            PRINT_LOG_INFO("REST call %.*s %.*s", (int)hm->method.len, hm->method.buf, (int)hm->uri.len, hm->uri.buf);
             api_handler(state, nc, hm);
         }
         else {
             struct mg_http_serve_opts opts = {
                 .root_dir = state->webroot
             };
-            PRINT_LOG_INFO("Serving %.*s", (int)hm->uri.len, hm->uri.ptr);
+            PRINT_LOG_INFO("Serving %.*s", (int)hm->uri.len, hm->uri.buf);
             mg_http_serve_dir(nc, ev_data, &opts);
         }
     }
-    (void) fn_data;
 }

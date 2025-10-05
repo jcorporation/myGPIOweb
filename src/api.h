@@ -1,7 +1,7 @@
 /*
  SPDX-License-Identifier: GPL-3.0-or-later
- myGPIOd (c) 2020-2024 Juergen Mang <mail@jcgames.de>
- https://github.com/jcorporation/mympd
+ myGPIOweb (c) 2024-2024 Juergen Mang <mail@jcgames.de>
+ https://github.com/jcorporation/myGPIOweb
 */
 
 #ifndef API_H

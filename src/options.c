@@ -1,7 +1,7 @@
 /*
  SPDX-License-Identifier: GPL-3.0-or-later
- myMPD (c) 2020-2024 Juergen Mang <mail@jcgames.de>
- https://github.com/jcorporation/mympd
+ myGPIOweb (c) 2024-2025 Juergen Mang <mail@jcgames.de>
+ https://github.com/jcorporation/myGPIOweb
 */
 
 #include "compile_time.h"
@@ -48,7 +48,7 @@ static void print_usage(const char *cmd) {
  * @param argc from main function
  * @param argv from main function
  * @return OPTIONS_RC_INVALID on error
- *         OPTIONS_RC_EXIT if myMPD should exit
+ *         OPTIONS_RC_EXIT if myGPIOweb should exit
  *         OPTIONS_RC_OK if arguments are parsed successfully
  */
 enum handle_options_rc handle_options(struct t_state *state, int argc, char **argv) {

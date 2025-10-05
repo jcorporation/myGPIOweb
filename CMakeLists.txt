@@ -1,6 +1,6 @@
 # SPDX-License-Identifier: GPL-3.0-or-later
-# myGPIOd (c) 2020-2024 Juergen Mang <mail@jcgames.de>
-# https://github.com/jcorporation/myGPIOd
+# myGPIOd (c) 2024-2025 Juergen Mang <mail@jcgames.de>
+# https://github.com/jcorporation/myGPIOweb
 
 # minimal cmake version needed for new option handling
 cmake_minimum_required(VERSION 3.13 FATAL_ERROR)
