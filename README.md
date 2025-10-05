@@ -1,11 +1,11 @@
 # Simple webfrontend for myGPIOd
 
-This project provides a simple webfrontend for myGPIOd. It uses the libmygpio library to connect to the myGPIOd socket.
+This project provides a simple webfrontend and REST-API for [myGPIOd](https://github.com/jcorporation/myGPIOd). It uses the libmygpio library to connect to the myGPIOd socket.
 
 ## Build
 
-1. Install dependencies: cmake, libmygpio
-2. Get myGPIOd tarball from [GitHub](https://github.com/jcorporation/myGPIOweb/releases/latest)
+1. Install dependencies: cmake, [libmygpio](https://github.com/jcorporation/myGPIOd)
+2. Get myGPIOweb tarball from [GitHub](https://github.com/jcorporation/myGPIOweb/releases/latest)
 3. Extract myGPIOweb tarball and change path to this directory
 4. Run cmake: `cmake -B build -DCMAKE_INSTALL_PREFIX:PATH=/usr -DCMAKE_BUILD_TYPE=Release .`
 5. Build: `make -C build`
@@ -27,7 +27,7 @@ mygpioweb [option]...
 
 ## Provided endpoints
 
-myGPIOweb provides a websocket to retrieve gpio events without polling and a REST API to control GPIOs.
+myGPIOweb provides a websocket to retrieve gpio events without polling and a REST-API to control GPIOs.
 
 ### Websocket
 
